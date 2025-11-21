@@ -11,24 +11,44 @@ interface AuthContextData {
   loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+const defaultAuthContext: AuthContextData = {
+  user: null,
+  isAuthenticated: false,
+  isAdmin: false,
+  loading: false,
+  login: async () => {
+    throw new Error('AuthContext.login usado fora do AuthProvider');
+  },
+  logout: () => {
+    throw new Error('AuthContext.logout usado fora do AuthProvider');
+  }
+};
+
+const AuthContext = createContext<AuthContextData>(defaultAuthContext);
+
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('@memirros:user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      const stored = localStorage.getItem('@memirros:user');
+      if (stored) setUser(JSON.parse(stored));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
-    const loggedUser = await authAPI.login(email, password);
-    setUser(loggedUser);
-    localStorage.setItem('@memirros:user', JSON.stringify(loggedUser));
+    setLoading(true);
+    try {
+      const loggedUser = await authAPI.login(email, password);
+      setUser(loggedUser);
+      localStorage.setItem('@memirros:user', JSON.stringify(loggedUser));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
@@ -40,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: !!user,
+        isAuthenticated: Boolean(user),
         isAdmin: user?.role === 'admin',
         login,
         logout,
@@ -52,10 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+
+  // se login/logout ainda são as funções default → provider ausente
+  if (context.login === defaultAuthContext.login) {
+    throw new Error('useAuth deve ser usado dentro de AuthProvider');
   }
+
   return context;
 }
+

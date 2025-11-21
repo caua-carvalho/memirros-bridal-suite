@@ -171,6 +171,7 @@ export const authAPI = {
     if (!user || password !== '123456') {
       throw new Error('Credenciais inválidas');
     }
+    console.log(`Usuário ${email} logado com sucesso.`);
     return user;
   }
 };

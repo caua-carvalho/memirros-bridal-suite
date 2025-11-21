@@ -19,10 +19,16 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
 
+    const isAdmin = localStorage.getItem('@memirros:user')?.includes('"role":"admin"') ?? false;
+
     try {
       await login(email, password);
       toast.success('Login realizado com sucesso!');
-      navigate('/');
+
+      if (isAdmin) navigate('/admin');
+      else {
+        navigate('/');
+      }
     } catch (error) {
       toast.error('Credenciais inválidas. Tente: cliente@memirros.com / 123456');
     } finally {
