@@ -7,15 +7,14 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/layouts/ProtectedRoute";
 
 // Client Pages
-import Login from "./pages/Login";
 import Catalog from "./pages/client/Catalog";
-import MyAppointments from "./pages/client/MyAppointments";
 
 // Admin Pages
 import AdminLogin from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import DressesManagement from "./pages/admin/DressesManagement";
 import AppointmentsManagement from "./pages/admin/AppointmentsManagement";
+import AppointmentsCalendar from "./pages/admin/AppointmentsCalendar";
 import ClientsManagement from "./pages/admin/ClientsManagement";
 
 import NotFound from "./pages/NotFound";
@@ -31,26 +30,8 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             {/* Public Routes */}
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Catalog />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-
-            {/* Client Routes */}
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute requireRole="client">
-                  <Catalog />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/minhas-provas"
-              element={
-                <ProtectedRoute requireRole="client">
-                  <MyAppointments />
-                </ProtectedRoute>
-              }
-            />
 
             {/* Admin Routes */}
             <Route
@@ -74,6 +55,14 @@ const App = () => (
               element={
                 <ProtectedRoute requireRole="admin">
                   <AppointmentsManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/calendario"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <AppointmentsCalendar />
                 </ProtectedRoute>
               }
             />

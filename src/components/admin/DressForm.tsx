@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface DressFormProps {
@@ -31,7 +32,7 @@ export function DressForm({ open, onClose, dress }: DressFormProps) {
     precoAluguel: '',
     descricao: '',
     disponivel: true,
-    imagens: '',
+    imagens: [] as string[],
     tamanhos: '',
   });
 
@@ -43,7 +44,7 @@ export function DressForm({ open, onClose, dress }: DressFormProps) {
         precoAluguel: dress.precoAluguel.toString(),
         descricao: dress.descricao,
         disponivel: dress.disponivel,
-        imagens: dress.imagens.join(', '),
+        imagens: dress.imagens,
         tamanhos: dress.tamanhos.join(', '),
       });
     } else {
@@ -53,7 +54,7 @@ export function DressForm({ open, onClose, dress }: DressFormProps) {
         precoAluguel: '',
         descricao: '',
         disponivel: true,
-        imagens: '',
+        imagens: [],
         tamanhos: '',
       });
     }
@@ -86,7 +87,7 @@ export function DressForm({ open, onClose, dress }: DressFormProps) {
       precoAluguel: parseFloat(formData.precoAluguel),
       descricao: formData.descricao,
       disponivel: formData.disponivel,
-      imagens: formData.imagens.split(',').map((img) => img.trim()).filter(Boolean),
+      imagens: formData.imagens,
       tamanhos: formData.tamanhos.split(',').map((t) => t.trim()).filter(Boolean),
     };
 
@@ -164,15 +165,52 @@ export function DressForm({ open, onClose, dress }: DressFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="imagens">URLs das Imagens (separadas por vírgula) *</Label>
-            <Textarea
-              id="imagens"
-              value={formData.imagens}
-              onChange={(e) => setFormData({ ...formData, imagens: e.target.value })}
-              placeholder="https://exemplo.com/img1.jpg, https://exemplo.com/img2.jpg"
-              rows={2}
-              required
-            />
+            <Label>Imagens do Vestido *</Label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {formData.imagens.map((img, idx) => (
+                <div key={idx} className="relative aspect-[3/4] rounded-lg overflow-hidden border bg-muted group">
+                  <img src={img} alt={`Preview ${idx + 1}`} className="w-full h-full object-cover" />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => {
+                      const newImages = [...formData.imagens];
+                      newImages.splice(idx, 1);
+                      setFormData({ ...formData, imagens: newImages });
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <div className="aspect-[3/4] border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-3 bg-muted/30 hover:bg-muted/50 transition-colors">
+                <Upload className="h-6 w-6 text-muted-foreground mb-2" />
+                <span className="text-xs text-center text-muted-foreground mb-2">Cole a URL</span>
+                <Input
+                  type="text"
+                  placeholder="URL da imagem"
+                  className="text-xs h-8"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const input = e.currentTarget;
+                      if (input.value.trim()) {
+                        setFormData({
+                          ...formData,
+                          imagens: [...formData.imagens, input.value.trim()]
+                        });
+                        input.value = '';
+                      }
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Cole as URLs das imagens e pressione Enter
+            </p>
           </div>
 
           <div className="space-y-2">

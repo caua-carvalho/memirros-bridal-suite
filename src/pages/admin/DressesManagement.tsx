@@ -84,61 +84,72 @@ export default function DressesManagement() {
           </Button>
         </div>
 
-        <Card>
-          <CardContent className="p-0">
-            {isLoading ? (
-              <div className="p-8 text-center text-muted-foreground">Carregando...</div>
-            ) : dresses && dresses.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Categoria</TableHead>
-                    <TableHead>Disponibilidade</TableHead>
-                    <TableHead>Preço</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dresses.map((dress) => (
-                    <TableRow key={dress.id}>
-                      <TableCell className="font-medium">{dress.nome}</TableCell>
-                      <TableCell>{dress.categoria}</TableCell>
-                      <TableCell>
-                        <Badge variant={dress.disponivel ? 'default' : 'secondary'}>
-                          {dress.disponivel ? 'Disponível' : 'Indisponível'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>R$ {dress.precoAluguel.toLocaleString('pt-BR')}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEdit(dress)}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => handleDelete(dress.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : (
-              <div className="p-8 text-center text-muted-foreground">
-                Nenhum vestido cadastrado ainda.
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <div className="aspect-[3/4] bg-muted"></div>
+                <CardContent className="p-4">
+                  <div className="h-4 bg-muted rounded mb-2"></div>
+                  <div className="h-4 bg-muted rounded w-2/3"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : dresses && dresses.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {dresses.map((dress) => (
+              <Card key={dress.id} className="overflow-hidden hover:shadow-lg transition-all group">
+                <div className="aspect-[3/4] overflow-hidden bg-muted relative">
+                  <img
+                    src={dress.imagens[0]}
+                    alt={dress.nome}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <Badge 
+                    variant={dress.disponivel ? 'default' : 'secondary'}
+                    className="absolute top-3 right-3"
+                  >
+                    {dress.disponivel ? 'Disponível' : 'Indisponível'}
+                  </Badge>
+                </div>
+                <CardContent className="p-4">
+                  <div className="mb-3">
+                    <h3 className="font-semibold text-lg text-foreground mb-1">{dress.nome}</h3>
+                    <p className="text-sm text-muted-foreground">{dress.categoria}</p>
+                  </div>
+                  <p className="text-xl font-bold text-primary mb-4">
+                    R$ {dress.precoAluguel.toLocaleString('pt-BR')}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(dress)}
+                      className="flex-1"
+                    >
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Editar
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDelete(dress.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="text-center py-12">
+              <p className="text-muted-foreground">Nenhum vestido cadastrado ainda.</p>
+            </CardContent>
+          </Card>
+        )}
 
         <DressForm
           open={formOpen}
