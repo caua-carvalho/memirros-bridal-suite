@@ -8,6 +8,7 @@ import { ProtectedRoute } from "./components/layouts/ProtectedRoute";
 
 // Client Pages
 import Catalog from "./pages/client/Catalog";
+import MyAppointments from "./pages/client/MyAppointments";
 
 // Admin Pages
 import AdminLogin from "./pages/admin/Login";
@@ -31,6 +32,7 @@ const App = () => (
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Catalog />} />
+            <Route path="/MyAppointments" element={<MyAppointments />} />
             <Route path="/admin/login" element={<AdminLogin />} />
 
             {/* Admin Routes */}

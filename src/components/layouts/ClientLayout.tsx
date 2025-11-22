@@ -31,6 +31,14 @@ export function ClientLayout({ children }: ClientLayoutProps) {
               >
                 Catálogo
               </Link>
+              <Link
+                to="/MyAppointments"
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/MyAppointments') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Meus Agendamentos
+              </Link>
             </nav>
 
             <div className="flex items-center gap-2">
