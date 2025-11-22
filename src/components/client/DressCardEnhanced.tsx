@@ -59,8 +59,7 @@ export function DressCard({ dress, onView }: DressCardProps) {
         <div className="flex gap-2">
           <Button 
             onClick={() => onView(dress)} 
-            variant="outline"
-            className="flex-1 h-11 text-base font-semibold transition-all"
+            className="flex-1 h-11 text-base font-semibold shadow-md hover:shadow-lg transition-all"
             disabled={!dress.disponivel}
           >
             <Eye className="h-5 w-5 mr-2" />
@@ -72,7 +71,7 @@ export function DressCard({ dress, onView }: DressCardProps) {
           <Button
             onClick={() => onView(dress)}
             size="lg"
-            className="w-full h-12 text-base font-bold shadow-lg hover:shadow-xl transition-all"
+            className="w-full h-12 text-base font-bold bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all"
           >
             💍 Garanta Este Vestido
           </Button>
