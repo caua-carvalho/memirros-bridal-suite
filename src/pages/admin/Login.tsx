@@ -9,8 +9,8 @@ import { toast } from 'sonner';
 import { Shield } from 'lucide-react';
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@memirros.com');
+  const [password, setPassword] = useState('123456');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
