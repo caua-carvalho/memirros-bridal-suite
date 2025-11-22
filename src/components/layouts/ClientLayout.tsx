@@ -55,6 +55,11 @@ export function ClientLayout({ children }: ClientLayoutProps) {
       <footer className="border-t bg-card mt-16">
         <div className="container mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
           <p>&copy; 2025 Memirros Noivas. Todos os direitos reservados.</p>
+          <br/>
+          <Link to="/admin/login" className="flex items-center justify-center gap-2 hover:text-primary">
+            <Calendar className="h-4 w-4" />
+            <span>Área do Administrador</span>
+          </Link>
         </div>
       </footer>
     </div>
