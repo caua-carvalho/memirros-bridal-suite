@@ -62,10 +62,10 @@ export default function MyAppointments() {
 
   return (
     <ClientLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 w-full px-2 sm:px-4 md:px-8">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Minhas Provas</h1>
-          <p className="text-muted-foreground">Acompanhe seus agendamentos</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Minhas Provas</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">Acompanhe seus agendamentos</p>
         </div>
 
         {isLoading ? (
@@ -79,19 +79,19 @@ export default function MyAppointments() {
         ) : appointments && appointments.length > 0 ? (
           <div className="space-y-4">
             {appointments.map((appointment) => (
-              <Card key={appointment.id}>
+              <Card key={appointment.id} className="w-full">
                 <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <CardTitle className="text-xl">{appointment.vestidoNome}</CardTitle>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                    <CardTitle className="text-lg sm:text-xl break-words max-w-full">{appointment.vestidoNome}</CardTitle>
                     <Badge variant={getStatusVariant(appointment.status)}>
                       {getStatusLabel(appointment.status)}
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-muted-foreground text-sm flex-wrap">
                         <Calendar className="h-4 w-4" />
                         <span>
                           {format(new Date(appointment.data + 'T00:00:00'), "dd 'de' MMMM 'de' yyyy", {
@@ -99,11 +99,11 @@ export default function MyAppointments() {
                           })}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-muted-foreground text-sm flex-wrap">
                         <Clock className="h-4 w-4" />
                         <span>{appointment.horario}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-muted-foreground text-sm flex-wrap">
                         <Shirt className="h-4 w-4" />
                         <span>Vestido ID: {appointment.vestidoId}</span>
                       </div>
@@ -112,18 +112,19 @@ export default function MyAppointments() {
                     {appointment.observacoes && (
                       <div>
                         <p className="text-sm font-medium mb-1">Observações:</p>
-                        <p className="text-sm text-muted-foreground">{appointment.observacoes}</p>
+                        <p className="text-sm text-muted-foreground break-words">{appointment.observacoes}</p>
                       </div>
                     )}
                   </div>
 
                   {appointment.status === 'pendente' || appointment.status === 'confirmado' ? (
-                    <div className="mt-4 flex justify-end">
+                    <div className="mt-4 flex flex-col sm:flex-row justify-end gap-2">
                       <Button
                         variant="destructive"
                         size="sm"
                         onClick={() => cancelMutation.mutate(appointment.id)}
                         disabled={cancelMutation.isPending}
+                        className="w-full sm:w-auto"
                       >
                         <X className="h-4 w-4 mr-2" />
                         Cancelar Prova
@@ -135,11 +136,11 @@ export default function MyAppointments() {
             ))}
           </div>
         ) : (
-          <Card>
+          <Card className="w-full">
             <CardContent className="text-center py-12">
               <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground mb-4">Você ainda não tem provas agendadas.</p>
-              <Button onClick={() => (window.location.href = '/')}>Ver Catálogo</Button>
+              <Button onClick={() => (window.location.href = '/')} className="w-full sm:w-auto">Ver Catálogo</Button>
             </CardContent>
           </Card>
         )}
