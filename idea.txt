@@ -1,0 +1,1 @@
+cadastrar whatsapp do atelie como adm e o celular do apresentador como cliente, assim podendo simular a comunicação automatizada , dando exemplo de funcionamento da API
