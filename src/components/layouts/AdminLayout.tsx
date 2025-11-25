@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { LogOut, LayoutDashboard, ShoppingBag, Calendar as CalIcon, Users } from 'lucide-react';
-import logoImg from '@/assets/logo.png';
+import { Logo } from '@/components/ui/logo';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -35,7 +35,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/admin" className="flex items-center gap-3">
-              <img src={logoImg} alt="Memirros Noivas" className="h-14 w-auto" />
+              <Logo className="h-14 w-auto" alt="Memirros Noivas" />
             </Link>
 
             <div className="flex items-center gap-3">

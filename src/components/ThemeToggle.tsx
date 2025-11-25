@@ -12,6 +12,12 @@ export function ThemeToggle() {
     
     setTheme(initialTheme);
     document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+    // notify listeners about the initial theme
+    try {
+      window.dispatchEvent(new CustomEvent('themeChange', { detail: initialTheme }));
+    } catch (e) {
+      // ignore in non-browser environments
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -19,6 +25,11 @@ export function ThemeToggle() {
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    try {
+      window.dispatchEvent(new CustomEvent('themeChange', { detail: newTheme }));
+    } catch (e) {
+      // ignore
+    }
   };
 
   return (
