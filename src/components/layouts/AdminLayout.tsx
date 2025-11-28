@@ -25,7 +25,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     navigate('/admin/login');
   };
 
-  const isActive = (path: string) => location.pathname === path;
+  const isDashboard = location.pathname === "/admin";
+
+  const isActive = (path: string) => {
+    if (path === "/admin") return isDashboard;
+    return location.pathname.startsWith(path);
+  };
+
 
   const navItems = [
     { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -37,7 +43,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background w-screen">
         {isMobile && <AppSidebar />}
         <header className="border-b bg-card sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4">
@@ -71,8 +77,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                     key={item.path}
                     to={item.path}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-medium ${isActive(item.path)
-                        ? 'bg-primary text-primary-foreground shadow-md'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      ? 'bg-primary text-primary-foreground shadow-md'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                       }`}
                   >
                     <Icon className="h-5 w-5" />

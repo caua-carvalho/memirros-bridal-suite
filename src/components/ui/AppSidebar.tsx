@@ -1,17 +1,3 @@
-import {
-  LayoutDashboard,
-  Package,
-  Warehouse,
-  ShoppingCart,
-  Truck,
-  RotateCcw,
-  Search,
-  History,
-  Users,
-  Settings,
-  Container,
-  Box,
-} from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
   Sidebar,
@@ -25,9 +11,14 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
+import { LayoutDashboard, ShoppingBag, Calendar as CalIcon, Users } from 'lucide-react';
+
 const menuItems = [
-  { title: "Catálogo", url: "/"},
-  { title: "Meus Agendamentos", url: "/MyAppointments"},
+    { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/admin/vestidos', label: 'Vestidos', icon: ShoppingBag },
+    { path: '/admin/agendamentos', label: 'Lista', icon: CalIcon },
+    { path: '/admin/calendario', label: 'Calendário', icon: CalIcon },
+    { path: '/admin/clientes', label: 'Clientes', icon: Users },
 ];
 
 export function AppSidebar() {
@@ -38,7 +29,7 @@ export function AppSidebar() {
       <SidebarContent>
         <div className="px-3 py-4">
           <h1 className={`font-bold text-primary transition-all ${open ? "text-xl" : "text-xs"}`}>
-            {open ? "TransFlow" : "TF"}
+            {open ? "Memirros" : "TF"}
           </h1>
         </div>
 
@@ -47,15 +38,15 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild>
                     <NavLink
-                      to={item.url}
-                      end={item.url === "/"}
+                      to={item.path}
+                      end={item.path === "/"}
                       className="flex items-center gap-3 px-3 py-2 rounded-md transition-colors hover:bg-sidebar-accent"
                       activeClassName="bg-sidebar-accent text-black font-medium"
                     >
-                      {open && <span>{item.title}</span>}
+                      {open && <span>{item.label}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
