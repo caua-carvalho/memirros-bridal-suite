@@ -74,7 +74,7 @@ export function DressCard({ dress, onView }: DressCardProps) {
             size="lg"
             className="w-full h-12 text-base font-bold shadow-lg hover:shadow-xl transition-all"
           >
-            💍 Garanta Este Vestido
+             Garanta Este Vestido
           </Button>
         )}
       </CardContent>
