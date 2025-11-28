@@ -7,6 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Shield } from 'lucide-react';
+import { Logo } from '@/components/ui/logo';
+import { Link } from 'react-router-dom';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('admin@memirros.com');
@@ -22,12 +25,12 @@ export default function AdminLogin() {
     try {
       await login(email, password);
       const user = JSON.parse(localStorage.getItem('@memirros:user') || '{}');
-      
+
       if (user.role !== 'admin') {
         toast.error('Acesso negado. Esta área é restrita a administradores.');
         return;
       }
-      
+
       toast.success('Login administrativo realizado!');
       navigate('/admin');
     } catch (error) {
@@ -38,54 +41,70 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="h-16 w-16 bg-primary rounded-full flex items-center justify-center">
-              <Shield className="h-8 w-8 text-primary-foreground" />
+    <div className="min-h-screen flex flex-col">
+      <header className="border-b bg-card sticky top-0 z-50 shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-3">
+              <Logo className="h-16 w-auto" alt="Memirros Noivas" />
+            </Link>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
             </div>
           </div>
-          <CardTitle className="text-2xl">Área Administrativa</CardTitle>
-          <CardDescription>
-            Acesso restrito aos administradores da Memirros Noivas
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">E-mail</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@memirros.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Senha</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Autenticando...' : 'Acessar Painel'}
-            </Button>
+        </div>
+      </header>
 
-            <div className="mt-4 p-3 bg-muted rounded-lg text-sm text-muted-foreground">
-              <p className="font-medium mb-1">Credencial de teste:</p>
-              <p>admin@memirros.com / 123456</p>
+      {/* Conteúdo que ocupa o restante da tela e centraliza */}
+      <main className="flex-1 flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="h-16 w-16 bg-primary rounded-full flex items-center justify-center">
+                <Shield className="h-8 w-8 text-primary-foreground" />
+              </div>
             </div>
-          </form>
-        </CardContent>
-      </Card>
+            <CardTitle className="text-2xl">Área Administrativa</CardTitle>
+            <CardDescription>
+              Acesso restrito aos administradores da Memirros Noivas
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">E-mail</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="admin@memirros.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Senha</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? 'Autenticando...' : 'Acessar Painel'}
+              </Button>
+
+              <div className="mt-4 p-3 bg-muted rounded-lg text-sm text-muted-foreground">
+                <p className="font-medium mb-1">Credencial de teste:</p>
+                <p>admin@memirros.com / 123456</p>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </main >
     </div>
   );
 }
