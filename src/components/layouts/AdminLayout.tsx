@@ -89,7 +89,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </nav>
           </aside>
 
-          <main className="flex-1 p-4 md:p-8">
+          <main className="flex-1 p-4 md:p-8 w-screen">
             {children}
           </main>
         </div>

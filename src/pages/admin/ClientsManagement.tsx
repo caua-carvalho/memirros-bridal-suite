@@ -77,60 +77,77 @@ export default function ClientsManagement() {
 
         <Card>
           <CardContent className="p-0">
+
             {isLoading ? (
               <div className="p-8 text-center text-muted-foreground">Carregando...</div>
             ) : clients && clients.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Telefone</TableHead>
-                    <TableHead>E-mail</TableHead>
-                    <TableHead>Histórico</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {clients.map((client) => (
-                    <TableRow key={client.id}>
-                      <TableCell className="font-medium">{client.nome}</TableCell>
-                      <TableCell>{client.telefone}</TableCell>
-                      <TableCell>{client.email}</TableCell>
-                      <TableCell>
-                        <div className="text-sm text-muted-foreground">
-                          {client.historicoAlugueis.length} aluguéis •{' '}
-                          {client.historicoProvas.length} provas
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setSelectedClient(client)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEdit(client)}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+
+
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-1/2 sm:w-auto">Nome</TableHead>
+
+                      <TableHead className="hidden sm:table-cell w-[140px]">Telefone</TableHead>
+
+                      <TableHead className="hidden md:table-cell min-w-[200px] max-w-[260px]">E-mail</TableHead>
+
+                      <TableHead className="hidden md:table-cell w-[160px]">Histórico</TableHead>
+
+                      <TableHead className="w-1/2 sm:w-auto text-right">Ações</TableHead>
+
+
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+
+                  <TableBody>
+                    {clients.map((client) => (
+                      <TableRow key={client.id}>
+                        <TableCell className="font-medium truncate w-1/2 sm:w-auto">
+                          {client.nome}
+                        </TableCell>
+
+                        <TableCell className="hidden sm:table-cell w-[140px]">
+                          {client.telefone}
+                        </TableCell>
+
+                        <TableCell className="hidden md:table-cell truncate max-w-[260px]">
+                          {client.email}
+                        </TableCell>
+
+                        <TableCell className="hidden md:table-cell w-[160px]">
+                          <div className="text-sm text-muted-foreground truncate">
+                            {client.historicoAlugueis.length} aluguéis • {client.historicoProvas.length} provas
+                          </div>
+                        </TableCell>
+
+                        <TableCell className="text-right w-1/2 sm:w-auto">
+                          <div className="flex justify-end gap-2">
+                            <Button variant="outline" size="icon" onClick={() => setSelectedClient(client)}>
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="icon" onClick={() => handleEdit(client)}>
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+
+
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              
+
             ) : (
               <div className="p-8 text-center text-muted-foreground">
                 Nenhum cliente cadastrado.
               </div>
             )}
+
           </CardContent>
         </Card>
+
 
         {/* Detalhes do Cliente */}
         <Dialog open={!!selectedClient} onOpenChange={() => setSelectedClient(null)}>
