@@ -1,5 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { appointmentsAPI } from '@/services/apiMock';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ClientLayout } from '@/components/layouts/ClientLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,27 +9,55 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
+type AppointmentStatus = "pendente" | "confirmado" | "cancelado" | "concluido";
+
+type Appointment = {
+  id: string;
+  cliente: string;
+  clienteId: string;
+  telefone: string;
+  email: string;
+  data: string;
+  horario: string;
+  vestidoId: string;
+  vestidoNome: string;
+  status: AppointmentStatus;
+  observacoes?: string;
+};
+
 export default function MyAppointments() {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const { data: appointments, isLoading } = useQuery({
-    queryKey: ['appointments', user?.id],
-    queryFn: () => appointmentsAPI.getByClientId(user?.id || ''),
-  });
+  // Carregar dados do localStorage
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("AgendamentosClient") || "[]") as Appointment[];
+    const filtered = stored.filter(a => a.clienteId === user?.id);
+    setAppointments(filtered);
+    setLoading(false);
+  }, [user]);
 
-  const cancelMutation = useMutation({
-    mutationFn: appointmentsAPI.cancel,
-    onSuccess: () => {
-      toast.success('Prova cancelada com sucesso!');
-      queryClient.invalidateQueries({ queryKey: ['appointments'] });
-    },
-    onError: () => {
-      toast.error('Erro ao cancelar prova.');
-    },
-  });
+  // Cancelar prova no localStorage
+  const handleCancel = (id: string) => {
+    const stored = JSON.parse(localStorage.getItem("appointments") || "[]") as Appointment[];
 
-  const getStatusVariant = (status: string) => {
+    const updated = stored.map(a =>
+      a.id === id ? { ...a, status: "cancelado" as const } : a
+    );
+
+    localStorage.setItem("appointments", JSON.stringify(updated));
+
+    setAppointments(prev =>
+      prev.map(a =>
+        a.id === id ? { ...a, status: "cancelado" as const } : a
+      )
+    );
+
+    toast.success("Prova cancelada com sucesso!");
+  };
+
+  const getStatusVariant = (status: AppointmentStatus) => {
     switch (status) {
       case 'confirmado':
         return 'default';
@@ -45,7 +72,7 @@ export default function MyAppointments() {
     }
   };
 
-  const getStatusLabel = (status: string) => {
+  const getStatusLabel = (status: AppointmentStatus) => {
     switch (status) {
       case 'confirmado':
         return 'Confirmado';
@@ -68,7 +95,7 @@ export default function MyAppointments() {
           <p className="text-muted-foreground text-sm sm:text-base">Acompanhe seus agendamentos</p>
         </div>
 
-        {isLoading ? (
+        {loading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse">
@@ -76,18 +103,21 @@ export default function MyAppointments() {
               </div>
             ))}
           </div>
-        ) : appointments && appointments.length > 0 ? (
+        ) : appointments.length > 0 ? (
           <div className="space-y-4">
             {appointments.map((appointment) => (
               <Card key={appointment.id} className="w-full">
                 <CardHeader>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-                    <CardTitle className="text-lg sm:text-xl break-words max-w-full">{appointment.vestidoNome}</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl break-words max-w-full">
+                      {appointment.vestidoNome}
+                    </CardTitle>
                     <Badge variant={getStatusVariant(appointment.status)}>
                       {getStatusLabel(appointment.status)}
                     </Badge>
                   </div>
                 </CardHeader>
+
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-3">
@@ -99,10 +129,12 @@ export default function MyAppointments() {
                           })}
                         </span>
                       </div>
+
                       <div className="flex items-center gap-2 text-muted-foreground text-sm flex-wrap">
                         <Clock className="h-4 w-4" />
                         <span>{appointment.horario}</span>
                       </div>
+
                       <div className="flex items-center gap-2 text-muted-foreground text-sm flex-wrap">
                         <Shirt className="h-4 w-4" />
                         <span>Vestido ID: {appointment.vestidoId}</span>
@@ -122,8 +154,7 @@ export default function MyAppointments() {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => cancelMutation.mutate(appointment.id)}
-                        disabled={cancelMutation.isPending}
+                        onClick={() => handleCancel(appointment.id)}
                         className="w-full sm:w-auto"
                       >
                         <X className="h-4 w-4 mr-2" />
@@ -140,7 +171,9 @@ export default function MyAppointments() {
             <CardContent className="text-center py-12">
               <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground mb-4">Você ainda não tem provas agendadas.</p>
-              <Button onClick={() => (window.location.href = '/')} className="w-full sm:w-auto">Ver Catálogo</Button>
+              <Button onClick={() => (window.location.href = '/')} className="w-full sm:w-auto">
+                Ver Catálogo
+              </Button>
             </CardContent>
           </Card>
         )}

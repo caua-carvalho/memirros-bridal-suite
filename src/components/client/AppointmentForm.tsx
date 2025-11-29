@@ -22,9 +22,29 @@ interface AppointmentFormProps {
   dressName: string;
 }
 
+// ----------------------------------------------
+// Helper para salvar no localStorage
+// ----------------------------------------------
+function saveToLocalStorage(agendamento: any) {
+  const key = "AgendamentosClient";
+
+  const existing = JSON.parse(localStorage.getItem(key) || "[]");
+
+  const payload = {
+    ...agendamento,
+    id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
+  };
+
+  const updated = [...existing, payload];
+
+  localStorage.setItem(key, JSON.stringify(updated));
+}
+
 export function AppointmentForm({ open, onClose, dressId, dressName }: AppointmentFormProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+
   const [formData, setFormData] = useState({
     nome: user?.nome || '',
     telefone: '',
@@ -36,7 +56,10 @@ export function AppointmentForm({ open, onClose, dressId, dressName }: Appointme
 
   const createMutation = useMutation({
     mutationFn: appointmentsAPI.create,
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      // Salva no localStorage junto com o retorno
+      saveToLocalStorage(variables);
+
       toast.success('Prova agendada com sucesso!');
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
       onClose();
@@ -48,13 +71,15 @@ export function AppointmentForm({ open, onClose, dressId, dressName }: Appointme
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.nome || !formData.telefone || !formData.data || !formData.horario) {
       toast.error('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
-    createMutation.mutate({
+    const defaultStatus = "pendente" as const;
+
+    const payload = {
       cliente: formData.nome,
       clienteId: user?.id,
       telefone: formData.telefone,
@@ -62,9 +87,12 @@ export function AppointmentForm({ open, onClose, dressId, dressName }: Appointme
       data: formData.data,
       horario: formData.horario,
       vestidoId: dressId,
-      status: 'pendente',
+      vestidoNome: dressName,
+      status: defaultStatus,
       observacoes: formData.observacoes,
-    });
+    };
+
+    createMutation.mutate(payload);
   };
 
   return (

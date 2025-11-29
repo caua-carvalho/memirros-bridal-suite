@@ -12,19 +12,26 @@ import {
 } from "@/components/ui/sidebar";
 
 import { LayoutDashboard, ShoppingBag, Calendar as CalIcon, Users } from 'lucide-react';
+import { useLocation } from "react-router-dom";
 
 const menuItems = [
-    { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/admin/vestidos', label: 'Vestidos', icon: ShoppingBag },
-    { path: '/admin/agendamentos', label: 'Lista', icon: CalIcon },
-    { path: '/admin/calendario', label: 'Calendário', icon: CalIcon },
-    { path: '/admin/clientes', label: 'Clientes', icon: Users },
+  { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/admin/vestidos', label: 'Vestidos', icon: ShoppingBag },
+  { path: '/admin/agendamentos', label: 'Lista', icon: CalIcon },
+  { path: '/admin/calendario', label: 'Calendário', icon: CalIcon },
+  { path: '/admin/clientes', label: 'Clientes', icon: Users },
 ];
-
-
 
 export function AppSidebar() {
   const { open } = useSidebar();
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    if (path === '/admin') {
+      return location.pathname === '/admin';
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <Sidebar collapsible="icon" className="border-r">
@@ -39,20 +46,29 @@ export function AppSidebar() {
           <SidebarGroupLabel>Principal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.path}
-                      end={item.path === "/"}
-                      className="flex items-center gap-3 px-3 py-2 rounded-md transition-colors hover:bg-sidebar-accent"
-                      activeClassName="bg-sidebar-accent text-black font-medium"
-                    >
-                      {open && <span>{item.label}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <SidebarMenuItem key={item.label}>
+                    <SidebarMenuButton asChild>
+                      <NavLink
+                        to={item.path}
+                        end={item.path === "/admin"}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-medium
+                          ${
+                            isActive(item.path)
+                              ? "bg-primary text-primary-foreground shadow-md"
+                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                          }`}
+                      >
+                        <Icon size={20} />
+                        {open && <span>{item.label}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

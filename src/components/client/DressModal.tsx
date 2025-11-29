@@ -87,6 +87,7 @@ export function DressModal({ dress, open, onClose }: DressModalProps) {
                 </>
               )}
             </div>
+
             {dress.imagens.length > 1 && (
               <div className="flex gap-2 mt-4 overflow-x-auto">
                 {dress.imagens.map((img, idx) => (
