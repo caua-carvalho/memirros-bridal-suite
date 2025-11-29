@@ -1,5 +1,14 @@
 import { Dress, Appointment, Client, User } from '@/types';
 
+import Azul from '../assets/azul.jpg';
+import AzulClaro from '../assets/azulclaro.jpg';
+import Branco from '../assets/branco.jpg';
+import Casamento from '../assets/casamento.jpg';
+import Classico from '../assets/classico.jpg';
+import Rosa from '../assets/rosa.jpg';
+import Verde from '../assets/verde.jpg';
+import Veu from '../assets/veu.jpg';
+
 // Simulação de delay de rede
 const delay = (ms: number = 400) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -10,8 +19,7 @@ let dresses: Dress[] = [
     nome: 'Vestido Noiva Clássico',
     categoria: 'Noiva',
     precoAluguel: 1500,
-    imagens: [  '/src/assets/classico.jpg',
-                '/src/assets/seu-arquivo-2.jpg'],
+    imagens: [  Classico, Classico],
     descricao: 'Modelo clássico com renda francesa, cauda longa e detalhes bordados à mão. Perfeito para cerimônias tradicionais.',
     disponivel: true,
     tamanhos: ['36', '38', '40', '42']
@@ -21,8 +29,7 @@ let dresses: Dress[] = [
     nome: 'Vestido Noiva Minimalista',
     categoria: 'Noiva',
     precoAluguel: 1800,
-    imagens: ['/src/assets/casamento.jpg',
-                '/src/assets/seu-arquivo-2.jpg'],
+    imagens: [Casamento, Casamento],
     descricao: 'Design clean e moderno, em cetim nobre. Elegância atemporal para noivas contemporâneas.',
     disponivel: true,
     tamanhos: ['36', '38', '40']
@@ -32,8 +39,7 @@ let dresses: Dress[] = [
     nome: 'Vestido Noiva Branco ',
     categoria: 'Noiva',
     precoAluguel: 1800,
-    imagens: ['/src/assets/branco.jpg',
-                '/src/assets/seu-arquivo-2.jpg'],
+    imagens: [Branco, Branco],
     descricao: 'Design clean e moderno, em cetim nobre. Elegância atemporal para noivas contemporâneas.',
     disponivel: true,
     tamanhos: ['36', '38', '40']
@@ -43,8 +49,7 @@ let dresses: Dress[] = [
     nome: 'Vestido Encantador',
     categoria: 'Madrinha',
     precoAluguel: 800,
-    imagens: ['/src/assets/veu.jpg',
-                '/src/assets/seu-arquivo-2.jpg'],
+    imagens: [Veu, Veu],
     descricao: 'Vestido em tule rosa blush com aplicações delicadas. Perfeito para madrinhas elegantes.',
     disponivel: true,
     tamanhos: ['36', '38', '40', '42', '44']
@@ -54,8 +59,7 @@ let dresses: Dress[] = [
     nome: 'Vestido Formatura Verde',
     categoria: 'Formatura',
     precoAluguel: 600,
-    imagens: ['/src/assets/verde.jpg',
-                '/src/assets/seu-arquivo-2.jpg'],
+    imagens: [Verde, Verde],
     descricao: 'Modelo midi em azul marinho com bordados em pedrarias. Sofisticado e moderno.',
     disponivel: false,
     tamanhos: ['36', '38', '40']
@@ -65,8 +69,7 @@ let dresses: Dress[] = [
     nome: 'Vestido Debutante Princesa Azul ',
     categoria: 'Debutante',
     precoAluguel: 1200,
-    imagens: ['/src/assets/azul.jpg',
-                '/src/assets/seu-arquivo-2.jpg'],
+    imagens: [Azul, Azul],
     descricao: 'Vestido volumoso em tule com corset bordado. O sonho de toda debutante.',
     disponivel: true,
     tamanhos: ['34', '36', '38', '40']
@@ -76,8 +79,7 @@ let dresses: Dress[] = [
     nome: 'Vestido Madrinha Rosa',
     categoria: 'Madrinha',
     precoAluguel: 800,
-    imagens: ['/src/assets/rosa.jpg',
-                '/src/assets/seu-arquivo-2.jpg'],
+    imagens: [Rosa, Rosa],
     descricao: 'Vestido em tule rosa blush com aplicações delicadas. Perfeito para madrinhas elegantes.',
     disponivel: true,
     tamanhos: ['36', '38', '40', '42', '44']
@@ -87,8 +89,7 @@ let dresses: Dress[] = [
     nome: 'Vestido Noiva Azul Claro',
     categoria: 'Noiva',
     precoAluguel: 1600,
-    imagens: ['/src/assets/azulclaro.jpg',
-                '/src/assets/seu-arquivo-2.jpg'],
+    imagens: [AzulClaro, AzulClaro],
     descricao: 'Estilo boho chic com renda macramê e manga longa. Ideal para casamentos ao ar livre.',
     disponivel: true,
     tamanhos: ['36', '38', '40', '42']
