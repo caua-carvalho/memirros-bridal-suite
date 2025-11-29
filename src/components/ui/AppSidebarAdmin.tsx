@@ -21,6 +21,8 @@ const menuItems = [
     { path: '/admin/clientes', label: 'Clientes', icon: Users },
 ];
 
+
+
 export function AppSidebar() {
   const { open } = useSidebar();
 

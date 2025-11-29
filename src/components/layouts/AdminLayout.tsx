@@ -5,7 +5,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { LogOut, LayoutDashboard, ShoppingBag, Calendar as CalIcon, Users } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
 import { SidebarProvider } from '../ui/sidebar';
-import { AppSidebar } from '../ui/AppSidebar';
+import { AppSidebar } from '../ui/AppSidebarAdmin';
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 

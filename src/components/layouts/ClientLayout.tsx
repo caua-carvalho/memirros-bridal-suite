@@ -3,7 +3,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { Calendar } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
 import { SidebarProvider } from '../ui/sidebar';
-import { AppSidebar } from '../ui/AppSidebar';
+import { AppSidebar } from '../ui/AppSidebarClient';
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 
