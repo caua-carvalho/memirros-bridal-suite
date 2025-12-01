@@ -11,20 +11,7 @@ interface AuthContextData {
   loading: boolean;
 }
 
-const defaultAuthContext: AuthContextData = {
-  user: null,
-  isAuthenticated: false,
-  isAdmin: false,
-  loading: false,
-  login: async () => {
-    throw new Error('AuthContext.login usado fora do AuthProvider');
-  },
-  logout: () => {
-    throw new Error('AuthContext.logout usado fora do AuthProvider');
-  }
-};
-
-const AuthContext = createContext<AuthContextData>(defaultAuthContext);
+const AuthContext = createContext<AuthContextData | undefined>(undefined);
 
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -76,8 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
 
-  // se login/logout ainda são as funções default → provider ausente
-  if (context.login === defaultAuthContext.login) {
+  if (!context) {
     throw new Error('useAuth deve ser usado dentro de AuthProvider');
   }
 
