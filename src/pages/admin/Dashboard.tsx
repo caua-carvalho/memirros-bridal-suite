@@ -36,7 +36,7 @@ export default function Dashboard() {
           <p className="text-muted-foreground">Visão geral do sistema Memirros Noivas</p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
           <StatsCard
             title="Total de Vestidos"
             value={dresses?.length || 0}
@@ -69,30 +69,33 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             {upcomingAppointments.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {upcomingAppointments.slice(0, 5).map((appointment) => (
                   <div
                     key={appointment.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border rounded-lg"
                   >
-                    <div className="space-y-1">
-                      <p className="font-medium">{appointment.cliente}</p>
-                      <p className="text-sm text-muted-foreground">{appointment.vestidoNome}</p>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="space-y-1 flex-1 min-w-0">
+                      <p className="font-medium truncate">{appointment.cliente}</p>
+                      <p className="text-sm text-muted-foreground truncate">{appointment.vestidoNome}</p>
+                      <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {format(new Date(appointment.data + 'T00:00:00'), "dd/MM/yyyy", {
-                            locale: ptBR,
-                          })}
+                          <Calendar className="h-3 w-3 shrink-0" />
+                          <span className="whitespace-nowrap">
+                            {format(new Date(appointment.data + 'T00:00:00'), "dd/MM/yyyy", {
+                              locale: ptBR,
+                            })}
+                          </span>
                         </span>
                         <span className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {appointment.horario}
+                          <Clock className="h-3 w-3 shrink-0" />
+                          <span className="whitespace-nowrap">{appointment.horario}</span>
                         </span>
                       </div>
                     </div>
                     <Badge
                       variant={appointment.status === 'confirmado' ? 'default' : 'secondary'}
+                      className="self-start sm:self-center"
                     >
                       {appointment.status === 'confirmado' ? 'Confirmado' : 'Pendente'}
                     </Badge>
