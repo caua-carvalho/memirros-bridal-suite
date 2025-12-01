@@ -15,15 +15,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Calendar, Clock, User, Phone, Mail, FileText } from 'lucide-react';
+import { Calendar, Clock, User, Phone, Mail, FileText, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { WhatsAppMessageModal } from '@/components/admin/WhatsAppMessageModal';
 
 export default function AppointmentsManagement() {
   const [statusFilter, setStatusFilter] = useState('todos');
   const [dateFilter, setDateFilter] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [whatsappAppointment, setWhatsappAppointment] = useState<Appointment | null>(null);
   const queryClient = useQueryClient();
 
   const { data: appointments, isLoading } = useQuery({
@@ -118,43 +120,52 @@ export default function AppointmentsManagement() {
           <div className="grid gap-4">
             {appointments.map((appointment) => (
               <Card key={appointment.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold">{appointment.cliente}</h3>
-                      <p className="text-sm text-muted-foreground">{appointment.vestidoNome}</p>
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-semibold truncate">{appointment.cliente}</h3>
+                      <p className="text-sm text-muted-foreground truncate">{appointment.vestidoNome}</p>
                     </div>
-                    <Badge variant={getStatusVariant(appointment.status)}>
+                    <Badge variant={getStatusVariant(appointment.status)} className="self-start">
                       {getStatusLabel(appointment.status)}
                     </Badge>
                   </div>
 
-                  <div className="grid md:grid-cols-3 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
                     <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span>
+                      <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <span className="truncate">
                         {format(new Date(appointment.data + 'T00:00:00'), "dd 'de' MMMM", {
                           locale: ptBR,
                         })}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
                       <span>{appointment.horario}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <span>{appointment.telefone}</span>
+                      <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <span className="truncate">{appointment.telefone}</span>
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700 text-white border-green-600"
+                      onClick={() => setWhatsappAppointment(appointment)}
+                    >
+                      <MessageCircle className="h-4 w-4 mr-1" />
+                      <span className="hidden sm:inline">WhatsApp</span>
+                    </Button>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setSelectedAppointment(appointment)}
                     >
-                      Ver Detalhes
+                      Detalhes
                     </Button>
                     {appointment.status === 'pendente' && (
                       <Button
@@ -281,6 +292,17 @@ export default function AppointmentsManagement() {
             )}
           </DialogContent>
         </Dialog>
+
+        {/* WhatsApp Message Modal */}
+        {whatsappAppointment && (
+          <WhatsAppMessageModal
+            open={!!whatsappAppointment}
+            onClose={() => setWhatsappAppointment(null)}
+            clientName={whatsappAppointment.cliente}
+            clientPhone={whatsappAppointment.telefone}
+            clientEmail={whatsappAppointment.email}
+          />
+        )}
       </div>
     </AdminLayout>
   );

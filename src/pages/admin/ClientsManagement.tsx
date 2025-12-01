@@ -22,14 +22,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { User, Phone, Mail, Eye, Pencil, ShoppingBag } from 'lucide-react';
+import { User, Phone, Mail, Eye, Pencil, ShoppingBag, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { WhatsAppMessageModal } from '@/components/admin/WhatsAppMessageModal';
 
 export default function ClientsManagement() {
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
+  const [whatsappClient, setWhatsappClient] = useState<Client | null>(null);
   const [editForm, setEditForm] = useState({ nome: '', telefone: '', email: '' });
   const queryClient = useQueryClient();
 
@@ -86,15 +88,15 @@ export default function ClientsManagement() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-1/2 sm:w-auto">Nome</TableHead>
+                      <TableHead className="w-full sm:w-auto">Nome</TableHead>
 
-                      <TableHead className="hidden sm:table-cell w-[140px]">Telefone</TableHead>
+                      <TableHead className="hidden lg:table-cell">Telefone</TableHead>
 
-                      <TableHead className="hidden md:table-cell min-w-[200px] max-w-[260px]">E-mail</TableHead>
+                      <TableHead className="hidden xl:table-cell">E-mail</TableHead>
 
-                      <TableHead className="hidden md:table-cell w-[160px]">Histórico</TableHead>
+                      <TableHead className="hidden lg:table-cell">Histórico</TableHead>
 
-                      <TableHead className="w-1/2 sm:w-auto text-right">Ações</TableHead>
+                      <TableHead className="text-right">Ações</TableHead>
 
 
                     </TableRow>
@@ -103,30 +105,41 @@ export default function ClientsManagement() {
                   <TableBody>
                     {clients.map((client) => (
                       <TableRow key={client.id}>
-                        <TableCell className="font-medium truncate w-1/2 sm:w-auto">
-                          {client.nome}
+                        <TableCell className="font-medium">
+                          <div>
+                            <p className="font-medium">{client.nome}</p>
+                            <p className="text-xs text-muted-foreground lg:hidden">{client.telefone}</p>
+                          </div>
                         </TableCell>
 
-                        <TableCell className="hidden sm:table-cell w-[140px]">
+                        <TableCell className="hidden lg:table-cell">
                           {client.telefone}
                         </TableCell>
 
-                        <TableCell className="hidden md:table-cell truncate max-w-[260px]">
+                        <TableCell className="hidden xl:table-cell truncate max-w-[200px]">
                           {client.email}
                         </TableCell>
 
-                        <TableCell className="hidden md:table-cell w-[160px]">
-                          <div className="text-sm text-muted-foreground truncate">
+                        <TableCell className="hidden lg:table-cell">
+                          <div className="text-sm text-muted-foreground">
                             {client.historicoAlugueis.length} aluguéis • {client.historicoProvas.length} provas
                           </div>
                         </TableCell>
 
-                        <TableCell className="text-right w-1/2 sm:w-auto">
-                          <div className="flex justify-end gap-2">
-                            <Button variant="outline" size="icon" onClick={() => setSelectedClient(client)}>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-1 flex-wrap">
+                            <Button 
+                              variant="outline" 
+                              size="icon"
+                              className="h-8 w-8 bg-green-600 hover:bg-green-700 text-white border-green-600"
+                              onClick={() => setWhatsappClient(client)}
+                            >
+                              <MessageCircle className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setSelectedClient(client)}>
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button variant="outline" size="icon" onClick={() => handleEdit(client)}>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleEdit(client)}>
                               <Pencil className="h-4 w-4" />
                             </Button>
                           </div>
@@ -299,6 +312,17 @@ export default function ClientsManagement() {
             </form>
           </DialogContent>
         </Dialog>
+
+        {/* WhatsApp Message Modal */}
+        {whatsappClient && (
+          <WhatsAppMessageModal
+            open={!!whatsappClient}
+            onClose={() => setWhatsappClient(null)}
+            clientName={whatsappClient.nome}
+            clientPhone={whatsappClient.telefone}
+            clientEmail={whatsappClient.email}
+          />
+        )}
       </div>
     </AdminLayout>
   );
